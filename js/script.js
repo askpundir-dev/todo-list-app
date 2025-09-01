@@ -1,10 +1,11 @@
 const taskContainer = JSON.parse(localStorage.getItem("tasks")) || [];
+console.log(taskContainer);
 const addBtn = document.querySelector("#add-task1-1");
-const deleteAllTaskBtn=document.querySelector("#all-task-del");
+const deleteAllTaskBtn = document.querySelector("#all-task-del");
 // console.log(deleteAllTaskBtn);
 addBtn.addEventListener("click", addTask);
 const taskInputBox = document.querySelector("#task1-1");
-console.log(taskInputBox);
+// console.log(taskInputBox);
 taskInputBox.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     addTask();
@@ -12,86 +13,52 @@ taskInputBox.addEventListener("keydown", (e) => {
 });
 
 const container = document.querySelector(".all-task-container");
-console.log(container);
+// console.log(container);
 
-        function renderUI() {
-          if (taskContainer.length === 0) {
-            container.classList.add("fade-out");
-            setTimeout(() => {
-              container.innerHTML = `
-                 <p>No Tasks Yet!</p>
-                 <button id="click-here">Click to add Tasks...</button>
-               `;
-              container.classList.add("place-center");
+function renderUI() {
+  if (taskContainer.length === 0) {
+    container.classList.add("fade-out");
+    setTimeout(() => {
+      container.innerHTML = `
+    <p>No Tasks Yet!</p>
+    <button id="click-here">Click to add Tasks...</button>
+  `;
+      container.classList.add("place-center");
 
-              container.querySelector("#click-here").onclick= () => { taskInputBox.focus();  };
-               
-            
+      container.querySelector("#click-here").onclick = () => {
+        taskInputBox.focus();
+      };
 
-              container.classList.remove("fade-out");
-              container.classList.add("fade-in");
+      container.classList.remove("fade-out");
+      container.classList.add("fade-in");
 
-              // Remove fade-in after animation ends
-              setTimeout(() => container.classList.remove("fade-in"), 300);
-            }, 200);
+      // Remove fade-in after animation ends
+      setTimeout(() => container.classList.remove("fade-in"), 300);
+    }, 200);
 
-            saveTasks();
-            return;
-          }
+    saveTasks();
+    return;
+  }
 
-          //container.classList.remove("place-center");
+  //container.classList.remove("place-center");
 
-          let containerHtml = "";
-          taskContainer.forEach((task, i) => {
-            const inptId = `id${i}`;
-            const html = `<div class="task-container">
-           <input id="${inptId}" class="check-box" type="checkbox" ${
-              task.checked ? "checked" : ""
-            }>
-           <p class="text-contant">${task.text}</p>
-           <button class="delete-btn"><img class="del-img" src="../assets/delete.png"></button>
-          </div>`;
-            containerHtml += html;
-            // console.log(containerHtml);
-          });
-          container.innerHTML = containerHtml;
-          // console.log(container.querySelector(inptId));
-          //   const chkBoxInput = container.querySelector(inptId);
-          //   chkBoxInput.checked = task.checked;
-          //   chkBoxInput.addEventListener("change", () => {
-          //     taskContainer[i].checked = chkBoxInput.checked;
-          //     saveTasks();
-          //   });
-
-          // div.addEventListener("click", (event) => {
-          //   if (
-          //     event.target !== chkBoxInput &&
-          //     event.target.tagName !== "BUTTON" &&
-          //     event.target.tagName !== "IMG"
-          //   ) {
-          //     chkBoxInput.checked = !chkBoxInput.checked;
-          //     taskContainer[i].checked = chkBoxInput.checked;
-          //     saveTasks();
-          //   }
-          // });
-
-          // const dltBtn = document.createElement("button");
-          // dltBtn.innerHTML = `<img class="del-img" src="/assets/delete.png">`;
-          // dltBtn.className = "delete-btn";
-
-          // dltBtn.addEventListener("click", (e) => {
-          //   e.stopPropagation();
-          //   div.classList.add("fade-out");
-          //   setTimeout(() => {
-          //     taskContainer.splice(i, 1);
-          //     renderUI();
-          //   }, 300);
-          // });
-
-          // setTimeout(() => div.classList.add("show"), 10);
-
-          saveTasks();
-        }
+  let containerHtml = "";
+  taskContainer.sort((a, b) => b.timeStamp - a.timeStamp);
+  taskContainer.forEach((task, i) => {
+    const inptId = `id${i}`;
+    const html = `<div class="task-container">
+<input id="${inptId}" class="check-box" type="checkbox" ${
+      task.checked ? "checked" : ""
+    }>
+<p class="text-contant">${task.text}</p>
+<button class="delete-btn"><img class="del-img" src="../assets/delete.png"></button>
+</div>`;
+    containerHtml += html;
+    // console.log(containerHtml);
+  });
+  container.innerHTML = containerHtml;
+  saveTasks();
+}
 renderUI();
 
 container.addEventListener("click", (event) => {
@@ -103,7 +70,7 @@ container.addEventListener("click", (event) => {
     );
     console.log(index);
     taskContainer.splice(index, 1);
-    console.log(taskContainer);
+
     renderUI();
   } else if (event.target.classList.contains("del-img")) {
     console.log("hello");
@@ -112,45 +79,20 @@ container.addEventListener("click", (event) => {
     );
     console.log(index);
     taskContainer.splice(index, 1);
-    console.log(taskContainer);
+    // console.log(taskContainer);
     renderUI();
   }
 
   if (event.target.classList.contains("check-box")) {
-    const index = [...container.querySelectorAll(".check-box")].indexOf(event.target);
-     console.log(index);
+    const index = [...container.querySelectorAll(".check-box")].indexOf(
+      event.target
+    );
+    console.log(index);
     taskContainer[index].checked = event.target.checked;
-     console.log(taskContainer[index].checked, taskContainer[index]);
+    console.log(taskContainer[index].checked, taskContainer[index]);
     saveTasks();
   }
 });
-
-function taskDeleteBtn(event) {
-  if (event.target.classList.contains("delete-btn")) {
-    console.log("i m deleted");
-
-    const index = [...container.querySelectorAll(".delete-btn")].indexOf(
-      event.target
-    );
-    console.log(index);
-    taskContainer.splice(index, 1);
-    console.log(taskContainer);
-    renderUI();
-  } else if (event.target.classList.contains("del-img")) {
-    console.log("hello");
-    const index = [...container.querySelectorAll(".del-img")].indexOf(
-      event.target
-    );
-    console.log(index);
-    taskContainer.splice(index, 1);
-    console.log(taskContainer);
-    renderUI();
-  }
-}
-
-// const delBtn=container.querySelectorAll(".delete-btn");
-// console.log(delBtn);
-// console.log(delBtn.length);
 
 // Helper to save to localStorage
 function saveTasks() {
@@ -159,12 +101,13 @@ function saveTasks() {
 
 function addTask() {
   const taskInBoxValue = taskInputBox.value.trim();
+  const timeStamp = Date.now();
+  // console.log(timeStamp);
   if (taskInBoxValue === "") {
-    document.querySelector("#task1-1").focus();
-    // console.log(document.querySelector("#task1-1"));
+    taskInputBox.focus();
     return;
   } else if (taskInBoxValue !== "") {
-    taskContainer.push({ text: taskInBoxValue, checked: false });
+    taskContainer.push({ text: taskInBoxValue, checked: false, timeStamp });
     taskInputBox.value = "";
     document.getElementById("to-do-tasks-1-1").classList.remove("place-center");
     // console.log(taskContainer[0].text);
@@ -174,9 +117,9 @@ function addTask() {
     renderUI();
 
     // Scroll to the latest task
-    const lastTask =
-      document.querySelector("#to-do-tasks-1-1").lastElementChild;
-    if (lastTask) lastTask.scrollIntoView({ behavior: "smooth", block: "end" });
+    // const lastTask =
+    //   document.querySelector("#to-do-tasks-1-1").lastElementChild;
+    // if (lastTask) lastTask.scrollIntoView({ behavior: "smooth", block: "end" });
   }
 
   //or
