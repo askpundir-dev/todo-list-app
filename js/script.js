@@ -1,4 +1,4 @@
-const taskContainer = JSON.parse(localStorage.getItem("tasks")) || [];
+let taskContainer = JSON.parse(localStorage.getItem("tasks")) || [];
 console.log(taskContainer);
 const addBtn = document.querySelector("#add-task1-1");
 const deleteAllTaskBtn = document.querySelector("#all-task-del");
@@ -20,8 +20,8 @@ function renderUI() {
     container.classList.add("fade-out");
     setTimeout(() => {
       container.innerHTML = `
-    <p>No Tasks Yet!</p>
-    <button id="click-here">Click to add Tasks...</button>
+  <p>No Tasks Yet!</p>
+  <button id="click-here">Click to add Tasks...</button>
   `;
       container.classList.add("place-center");
 
@@ -45,14 +45,19 @@ function renderUI() {
   let containerHtml = "";
   taskContainer.sort((a, b) => b.timeStamp - a.timeStamp);
   taskContainer.forEach((task, i) => {
+    console.log(typeof task.timeStamp);
     const inptId = `id${i}`;
-    const html = `<div class="task-container">
-<input id="${inptId}" class="check-box" type="checkbox" ${
+    const html = `<div class="task-container" data-task-container-id='${
+      task.timeStamp
+    }'>
+  <input id="${inptId}" class="check-box" type="checkbox" ${
       task.checked ? "checked" : ""
     }>
-<p class="text-contant">${task.text}</p>
-<button class="delete-btn"><img class="del-img" src="../assets/delete.png"></button>
-</div>`;
+  <p class="text-contant">${task.text}</p>
+  <button class="delete-btn" data-delete-id='${
+    task.timeStamp
+  }'><img class="del-img" src="../assets/delete.png"></button>
+  </div>`;
     containerHtml += html;
     // console.log(containerHtml);
   });
@@ -61,38 +66,87 @@ function renderUI() {
 }
 renderUI();
 
+
+
+
+// container.addEventListener("click", (event) => {
+//   const taskContainerElement = event.target.closest(".task-container");
+//   console.log(taskContainerElement);
+//   const taskContainerId = Number(taskContainerElement.dataset.taskContainerId);
+//   console.log(taskContainerId);
+
+//   const deleteBtn = event.target.closest(".delete-btn");
+//   const checkbox = event.target.closest(".check-box");
+//   console.log(checkbox);
+//   if (deleteBtn) {
+//     deleteOnetask(taskContainerId);
+//   }
+
+//   if (event.target.classList.contains("check-box")) {
+//     taskContainer.forEach((task) => {
+//       if (task.timeStamp === taskContainerId) {
+//         task.checked = checkbox.checked;
+//         saveTasks();
+//         console.log(task);
+//       }
+//     });
+//   } else if (taskContainerElement) {
+//     taskContainer.forEach((task) => {
+//       if (task.timeStamp === taskContainerId) {
+//         task.checked = !task.checked; // important eazy code line
+//       }
+//     });
+//   }
+//   renderUI();
+// });
+
+
+//OPTIMIZED THE ABOVE CODE
+
 container.addEventListener("click", (event) => {
-  if (event.target.classList.contains("delete-btn")) {
-    console.log("i m deleted");
+  const taskContainerElement = event.target.closest(".task-container");
+  if (!taskContainerElement) return;
 
-    const index = [...container.querySelectorAll(".delete-btn")].indexOf(
-      event.target
-    );
-    console.log(index);
-    taskContainer.splice(index, 1);
+  const taskContainerId = Number(taskContainerElement.dataset.taskContainerId);
+  const deleteBtn = event.target.closest(".delete-btn");
+  const checkbox = event.target.closest(".check-box");
 
-    renderUI();
-  } else if (event.target.classList.contains("del-img")) {
-    console.log("hello");
-    const index = [...container.querySelectorAll(".del-img")].indexOf(
-      event.target
-    );
-    console.log(index);
-    taskContainer.splice(index, 1);
-    // console.log(taskContainer);
-    renderUI();
+  // 🗑️ Delete case
+  if (deleteBtn) {
+    deleteOneTask(taskContainerId);
+    return;
   }
 
-  if (event.target.classList.contains("check-box")) {
-    const index = [...container.querySelectorAll(".check-box")].indexOf(
-      event.target
-    );
-    console.log(index);
-    taskContainer[index].checked = event.target.checked;
-    console.log(taskContainer[index].checked, taskContainer[index]);
-    saveTasks();
+  // Find the task once
+  const task = taskContainer.find(t => t.timeStamp === taskContainerId);
+  if (!task) return;
+
+  // ✅ Checkbox clicked
+  if (checkbox) {
+    task.checked = checkbox.checked;
+  } 
+  // 📦 Task container clicked (not delete/checkbox)
+  else {
+    task.checked = !task.checked;
   }
+
+  saveTasks();
+  renderUI();
 });
+
+
+function deleteOneTask(deleteId) {
+  console.log("i m deleted");
+  let newTaskContainer = [];
+  taskContainer.forEach((task) => {
+    if (task.timeStamp !== deleteId) {
+      newTaskContainer.push(task);
+    }
+  });
+  taskContainer = newTaskContainer;
+  console.log(taskContainer);
+  renderUI();
+}
 
 // Helper to save to localStorage
 function saveTasks() {
@@ -186,5 +240,3 @@ function confirmationPopUp(message, confirmAction) {
   document.body.appendChild(overlay);
   document.body.appendChild(popup);
 }
-
-// renderTasks();
