@@ -56,7 +56,7 @@ function renderUI() {
 <p class="text-contant">${task.text}</p>
 <button class="delete-btn" data-delete-id='${
       task.timeStamp
-    }'><img class="del-img" src="../assets/delete.png"></button>
+    }'><img class="del-img" src="./assets/delete.png"></button>
 </div>`;
     containerHtml += html;
     // console.log(containerHtml);
