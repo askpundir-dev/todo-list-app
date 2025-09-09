@@ -20,9 +20,9 @@ function renderUI() {
     container.classList.add("fade-out");
     setTimeout(() => {
       container.innerHTML = `
-  <p>No Tasks Yet!</p>
-  <button id="click-here">Click to add Tasks...</button>
-  `;
+<p>No Tasks Yet!</p>
+<button id="click-here">Click to add Tasks...</button>
+`;
       container.classList.add("place-center");
 
       container.querySelector("#click-here").onclick = () => {
@@ -50,14 +50,14 @@ function renderUI() {
     const html = `<div class="task-container" data-task-container-id='${
       task.timeStamp
     }'>
-  <input id="${inptId}" class="check-box" type="checkbox" ${
+<input id="${inptId}" class="check-box" type="checkbox" ${
       task.checked ? "checked" : ""
     }>
-  <p class="text-contant">${task.text}</p>
-  <button class="delete-btn" data-delete-id='${
-    task.timeStamp
-  }'><img class="del-img" src="../assets/delete.png"></button>
-  </div>`;
+<p class="text-contant">${task.text}</p>
+<button class="delete-btn" data-delete-id='${
+      task.timeStamp
+    }'><img class="del-img" src="../assets/delete.png"></button>
+</div>`;
     containerHtml += html;
     // console.log(containerHtml);
   });
@@ -65,9 +65,6 @@ function renderUI() {
   saveTasks();
 }
 renderUI();
-
-
-
 
 // container.addEventListener("click", (event) => {
 //   const taskContainerElement = event.target.closest(".task-container");
@@ -100,7 +97,6 @@ renderUI();
 //   renderUI();
 // });
 
-
 //OPTIMIZED THE ABOVE CODE
 
 container.addEventListener("click", (event) => {
@@ -118,13 +114,13 @@ container.addEventListener("click", (event) => {
   }
 
   // Find the task once
-  const task = taskContainer.find(t => t.timeStamp === taskContainerId);
+  const task = taskContainer.find((t) => t.timeStamp === taskContainerId);
   if (!task) return;
 
   // ✅ Checkbox clicked
   if (checkbox) {
     task.checked = checkbox.checked;
-  } 
+  }
   // 📦 Task container clicked (not delete/checkbox)
   else {
     task.checked = !task.checked;
@@ -133,7 +129,6 @@ container.addEventListener("click", (event) => {
   saveTasks();
   renderUI();
 });
-
 
 function deleteOneTask(deleteId) {
   console.log("i m deleted");
