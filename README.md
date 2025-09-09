@@ -28,5 +28,6 @@ A simple and responsive **To-Do List application** built with **HTML, CSS, and J
 ## 📸 Screenshots  
 
 ### Main Interface  
-<img src="screenshots/no-task-yet.png" alt="To-Do List App" width="600"/>
+<img src="screenshots/no-task-yet.png" alt="To-Do List no task" width="600"/>
 
+<img src="screenshots/to-do list.png" alt="To-Do List App" width="600"/>
