@@ -82,6 +82,12 @@ body {
 .main-container-div::-webkit-scrollbar {
   display: none;
 }
+/* or using  */
+.main-container-div {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 
 #to-do-tasks-1-1 {
   width: 96%;
@@ -469,15 +475,20 @@ button:hover {
 }
 @media screen and (max-width: 481px) {
   .main-container-div {
-    width: 80vw;
+    width: 98%;
+     min-width: 340px;
+    height: 95dvh;
+    min-height: 550px;
   }
 }
 @media screen and (max-width: 481px) {
   .popup {
-    width: 50vw;
+    width: 70vw;
+    padding: 1.5rem 1rem 0.1rem;
   }
   #confirm-del,
   #cancel-btn {
-    margin: 4px;
+    margin: 1rem;
+    margin-top: 1rem;
   }
 }
